@@ -1,3 +1,5 @@
+from urllib import response
+
 from llm.generate import generate
 from tools.registry import build_tool_prompt
 from utils.json_utils import extract_json
@@ -44,9 +46,27 @@ Return ONLY JSON.
 
     response = generate(prompt)
 
+    print("\nRAW REPLAN RESPONSE")
+    print(response)
+
     plan = extract_json(response)
+
+    valid_plan = []
+
+    for step in plan:
+
+        if (
+            isinstance(step, dict)
+            and "tool" in step
+            and "input" in step
+        ):
+            valid_plan.append(step)
+
+    return valid_plan
+
+    print("\nPARSED PLAN")
+    print(plan)
 
     if not isinstance(plan, list):
         return []
-
-    return plan
+        return plan

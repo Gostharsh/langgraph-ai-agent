@@ -47,6 +47,14 @@ def execute_plan(plan):
 
         except Exception as e:
 
+            
+
+            import traceback
+
+            print("\n===== EXECUTION ERROR =====")
+            traceback.print_exc()
+            print("===========================\n")
+
             success = False
             result = str(e)
 

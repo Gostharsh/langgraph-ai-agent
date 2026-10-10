@@ -1,112 +1,4 @@
-# from agents.planner import create_plan
-# from agents.validator import validate_plan
-# from agents.executor import execute_plan
-# from agents.reflector import reflect
-# from agents.replanner import replan
-# from agents.answer_generator import generate_final_answer
-# from config import MAX_RETRIES
-# from tools.registry import TOOLS
-# from tools.registry import build_tool_prompt
-# from rag import build_rag
-# from memory.memory import add_message
-# from memory.memory import get_history
-# from memory.memory import ConversationMemory
 
-# memory = ConversationMemory()
-
-
-
-# while True:
-
-#     question = input("\nAsk: ")
-#     add_message(
-#         "user",
-#         question
-#     )
-
-#     if question.lower() == "exit":
-#         break
-
-#     print("\n===== PLANNING =====")
-
-#     plan = create_plan(question)
-
-#     plan = validate_plan(
-#         plan
-#     )
-
-#     print("\nVALIDATED PLAN:")
-
-#     if not plan:
-
-#         print("\nNo valid plan found.")
-
-#         print("\n===== FINAL ANSWER =====")
-#         print(
-#             "I cannot complete that request with the currently available tools."
-#         )
-
-#         continue
-
-#     for step in plan:
-#         print(step)
-
-#     print("\n===== EXECUTING =====")
-
-#     observations = execute_plan(plan)
-
-#     retries = 0
-
-#     while retries < MAX_RETRIES:
-
-#         reflection = reflect(observations)
-
-#         print("\n===== REFLECTION =====")
-
-#         if reflection["has_failures"]:
-#             for task in reflection["failed_tasks"]:
-#                 print(task)
-#         else:
-#             print("No failures detected.")
-
-#         if not reflection["has_failures"]:
-#             break
-
-#         print("\n===== REPLANNING =====")
-
-#         new_plan = replan(
-#             question,
-#             reflection["failed_tasks"]
-#         )
-
-#         if not new_plan:
-#             break
-
-#         new_obs = execute_plan(new_plan)
-
-#         observations.extend(new_obs)
-
-#         retries += 1
-
-#     print("\n===== OBSERVATIONS =====")
-
-#     for obs in observations:
-#         print(obs)
-
-#     answer = generate_final_answer(
-#         question,
-#         observations
-#     )
-
-#     add_message(
-#         "assistant",
-#         answer
-#     )
-
-#     print("\n===== FINAL ANSWER =====")
-#     print(answer)
-
-#     print(get_history())
 
 from agents.query_rewriter import rewrite_query
 from agents.planner import create_plan
@@ -115,10 +7,8 @@ from agents.executor import execute_plan
 from agents.reflector import reflect
 from agents.replanner import replan
 from agents.answer_generator import generate_final_answer
-from memory.memory import memory
 from agents.router import route_question
-from agents.direct_executor import execute_direct
-from State import create_state
+from agents.direct_executor import execute_direct                           
 from nodes.rewrite_node import rewrite_node
 from nodes.router_node import router_node
 from nodes.planner_node import planner_node
@@ -150,9 +40,9 @@ def main():
             print("Goodbye.")
             break
 
-        state = create_state(question)
+        # state = create_state(question)
 
-        memory.add_user(question)
+        # memory.add_user(question)
 
         state = rewrite_node(state)
 
@@ -184,7 +74,7 @@ def main():
                 state.observations
             )
 
-            memory.add_assistant(state.answer)
+            # memory.add_assistant(state.answer)
 
             print("\n===== FINAL ANSWER =====")
             print(state.answer)
@@ -291,7 +181,7 @@ def main():
 
             print("\n===== MEMORY =====")
 
-            for msg in memory.get_history():
+            for msg in state.history:
                 print(
                     f"{msg['role']}: {msg['content']}"
                 )

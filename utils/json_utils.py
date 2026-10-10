@@ -14,5 +14,6 @@ def extract_json(text):
 
     try:
         return json.loads(match.group())
-    except Exception:
+    except Exception as e:
+        print("JSON PARSING ERROR:", e)
         return []

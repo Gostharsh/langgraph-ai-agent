@@ -1,3 +1,4 @@
+# from langgraph.checkpoint import memory
 from langgraph.graph import (
     StateGraph,
     START,
@@ -13,9 +14,10 @@ from nodes.planner_node import planner_node
 from nodes.reflector_node import reflector_node
 from nodes.replanner_node import replanner_node
 from nodes.answer_node import answer_node
-
 from graph.reflection_edges import reflection_decision
 from graph.conditional_edges import route_decision
+from langgraph.checkpoint.memory import MemorySaver
+
 
 
 builder = StateGraph(AgentState)
@@ -34,7 +36,10 @@ builder.add_node("replanner", replanner_node)
 
 builder.add_node("answer", answer_node)
 
+# builder.add_node("memory", memory_node)
+
 builder.add_edge(START, "rewrite")
+
 
 builder.add_edge("rewrite", "router")
 
@@ -67,5 +72,9 @@ builder.add_edge("replanner","executor")
 
 builder.add_edge("answer", END)
 
-graph = builder.compile()
+memory = MemorySaver()
+
+graph = builder.compile(
+    checkpointer=memory
+)
 

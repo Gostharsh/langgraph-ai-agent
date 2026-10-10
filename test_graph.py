@@ -1,40 +1,52 @@
 from graph.build_graph import graph
-from state.agent_state import AgentState
 
-# Direct route test
-state = AgentState(
-    question="What is 50*4?"
+
+config = {
+    "configurable": {
+        "thread_id": "user_1"
+    }
+}
+
+
+# =========================
+# FIRST QUESTION
+# =========================
+
+result = graph.invoke(
+    {
+        "question": "What is investing?"
+    },
+    config=config
 )
 
-result = graph.invoke(state)
+print("\nFIRST RUN")
+print(result["answer"])
 
-print("\nDIRECT TEST")
-print(result)
 
-# Planner route test
-state = AgentState(
-    question="Explain investing"
+snapshot = graph.get_state(config)
+history = snapshot.values.get("history", [])
+
+print("\nHISTORY AFTER FIRST RUN")
+print(snapshot.values["history"])
+
+
+# =========================
+# SECOND QUESTION
+# =========================
+
+result = graph.invoke(
+    {
+        "question": "Explain it simply"
+    },
+    config=config
 )
 
-result = graph.invoke(state)
-
-print("\nPLANNER TEST")
-print(result)
-
-# from state.agent_state import AgentState
-# from state.agent_state import AgentState
-# from state.models import PlanStep
+print("\nSECOND RUN")
+print(result["answer"])
 
 
-# state = AgentState(
-#     question="test"
-# )
+snapshot = graph.get_state(config)
+history = snapshot.values.get("history", [])
 
-# state.plan.append(
-#     PlanStep(
-#         tool="pdf_search",
-#         input="investing"
-#     )
-# )
-
-# print(state.plan[0].tool)
+print("\nHISTORY AFTER SECOND RUN")
+print(snapshot.values["history"])

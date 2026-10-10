@@ -1,6 +1,7 @@
 
 from pydantic import BaseModel, Field
-
+from pydantic import BaseModel
+from typing import Literal
 
 class Route(BaseModel):
 
@@ -28,12 +29,16 @@ class Reflection(BaseModel):
     failed_tasks: list = Field(default_factory=list)
 
 
-from pydantic import BaseModel
 
 
 class PlanStep(BaseModel):
 
-    tool: str
-
+    tool: Literal[
+        "pdf_search",
+        "calculator",
+        "get_time"
+    ]
     input: str = ""
 
+class PlanOutput(BaseModel):
+    steps: list[PlanStep]

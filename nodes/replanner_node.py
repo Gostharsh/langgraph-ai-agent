@@ -15,6 +15,8 @@ def replanner_node(state):
         state.question,
         state.reflection.failed_tasks
     )
+    print("\nNEW PLAN")
+    print(new_plan)
 
     state.new_plan = new_plan
     state.plan = new_plan
